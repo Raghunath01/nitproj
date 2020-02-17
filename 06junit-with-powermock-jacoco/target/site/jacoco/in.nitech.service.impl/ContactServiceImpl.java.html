@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ContactServiceImpl.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">05junit-with-easymock</a> &gt; <a href="index.source.html" class="el_package">in.nitech.service.impl</a> &gt; <span class="el_source">ContactServiceImpl.java</span></div><h1>ContactServiceImpl.java</h1><pre class="source lang-java linenums">package in.nitech.service.impl;
+
+import java.util.List;
+
+import in.nitech.dao.IContactDao;
+import in.nitech.exception.DataNotFoundException;
+import in.nitech.model.Contact;
+import in.nitech.service.IContactService;
+
+<span class="fc" id="L10">public class ContactServiceImpl implements IContactService{</span>
+
+	private IContactDao dao;
+	
+	public void setDao(IContactDao dao) {
+<span class="fc" id="L15">		this.dao = dao;</span>
+<span class="fc" id="L16">	}</span>
+	
+	@Override
+	public Long findContactNumByName(String name) {
+<span class="fc" id="L20">		 Long num = dao.findContactNumByName(name);</span>
+<span class="fc bfc" id="L21" title="All 2 branches covered.">		 if(num==null) {</span>
+<span class="fc" id="L22">			 throw new DataNotFoundException(&quot;Name is not Available&quot;);</span>
+		 }
+<span class="fc" id="L24">		return num;</span>
+	}
+
+	@Override
+	public List&lt;Contact&gt; findAll() {
+<span class="fc" id="L29">		List&lt;Contact&gt; contacts = dao.findAll();</span>
+<span class="fc bfc" id="L30" title="All 4 branches covered.">		if(contacts == null || contacts.isEmpty()) {</span>
+<span class="fc" id="L31">			throw new DataNotFoundException(&quot;No Contacts available&quot;);</span>
+		}
+<span class="fc" id="L33">		return contacts;</span>
+	}
+	
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>
