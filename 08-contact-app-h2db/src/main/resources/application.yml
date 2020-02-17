@@ -1,0 +1,27 @@
+#Server Properties
+debug: true
+server:
+  port: 9898
+  servlet:
+    context-path: /myapp
+#Datasource Properties
+spring:
+#  datasource:
+#    driver-class-name:
+
+
+  h2:
+    console:
+      enabled: true
+      
+#View Resolver
+  mvc:
+    view:
+      prefix: /pages/
+      suffix: .jsp
+      
+#ORM
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: create-drop
