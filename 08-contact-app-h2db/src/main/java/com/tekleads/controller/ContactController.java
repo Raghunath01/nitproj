@@ -9,9 +9,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -20,23 +21,24 @@ import com.tekleads.service.ContactService;
 
 @Controller
 public class ContactController {
-	
-	private Logger logger = LoggerFactory.getLogger(getClass());//getClass() = ContactController.class
-	
+
+	private static final Logger logger = LoggerFactory.getLogger(ContactController.class);//getClass() = ContactController.class
+	private static final String CONTACT_STR = "contact";
 	@Autowired
 	private ContactService contactService;
-	
-	@RequestMapping("/contactPage")
+
+	@GetMapping("/contactPage")
 	public String init(Model model) {
 		logger.debug("init method started");
-		model.addAttribute("contact", new Contact());
+		model.addAttribute(CONTACT_STR, new Contact());
 		logger.debug("init method ended");
-		return "contact";
+		return CONTACT_STR;
 	}
 	
-	@RequestMapping(value="/save", method=RequestMethod.POST)
+	//for save and update operation both.
+	@PostMapping("/save")
 	public String handleSubmitButton(@ModelAttribute("contact")Contact contact, Model model) {
-		logger.debug("handleSubmitButton method started");
+		logger.debug("handleSubmitButton method started {}'", contact);
 		boolean flag = contactService.saveContact(contact);
 		if(flag) {
 			model.addAttribute("message", "Contact Saved Successfuly...");
@@ -47,8 +49,8 @@ public class ContactController {
 		logger.debug("handleSubmitButton method ended");
 		return "redirect:/contactPage";
 	}
-	
-	@RequestMapping("/allContacts")
+
+	@GetMapping("/allContacts")
 	public String handleViewAllContactsHyperLink(Model model) {
 		logger.debug("handleViewAllContactsHyperLink method started");
 		List<Contact> contacts = contactService.getAllContacts();
@@ -56,19 +58,18 @@ public class ContactController {
 		logger.debug("handleViewAllContactsHyperLink method ended");
 		return "viewContacts";
 	}
-	
-	@RequestMapping("/edit")
+
+	@GetMapping("/edit")
 	public String handleEditLink(HttpServletRequest req, Model model) {
 		logger.debug("handleEditLink method started");
 		Integer id = Integer.parseInt(req.getParameter("id"));
 		Contact contact = contactService.getOneContactById(id);
-		model = (Model) req.getAttribute("model");
-		model.addAttribute("contact", contact);
+		model.addAttribute(CONTACT_STR, contact);
 		logger.debug("handleEditLink method ended");
-		return "contact";
+		return CONTACT_STR;
 	}
-	
-	@RequestMapping("/delete")
+
+	@DeleteMapping("/delete")
 	public String handleDeleteLink(@RequestParam Integer id, Model model, RedirectAttributes redirectAttributes) {
 		logger.debug("handleDeleteLink method started");
 		String msg = null;
@@ -86,5 +87,5 @@ public class ContactController {
 		logger.debug("handleDeleteLink method ended");
 		return "redirect:/allContacts";
 	}
-	
+
 }

@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,17 +21,21 @@ public class ContactServiceImpl implements ContactService {
 	@Autowired
 	private ContactDtlsRepository contactRepo;
 	
+	private static final Logger logger = LoggerFactory.getLogger(ContactServiceImpl.class);
+
+	
 	@Override
 	public boolean saveContact(Contact contact) {
+		logger.debug("Contact object {}. ",contact);
 		ContactDtlsEntity entity = new ContactDtlsEntity();
 		BeanUtils.copyProperties(contact, entity);
 		entity.setActiveSw('Y');
-		if( !(contact.getContactId()==null) ) {
+		if( contact.getContactId()!=null ) {
 			int id = contact.getContactId();
 			CreationDate creationDate = contactRepo.findByContactId(id);
-			System.out.println("****************************************");
-			System.out.println(creationDate.getDateModified());
-			System.out.println("****************************************");
+			logger.info("****************************************");
+			logger.info("Modified Date {}.",creationDate.getDateModified());
+			logger.info("****************************************");
 			entity.setDateCreated(creationDate.getDateModified());
 		}
 		ContactDtlsEntity savedEntity = contactRepo.save(entity);

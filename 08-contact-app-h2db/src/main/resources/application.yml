@@ -1,5 +1,5 @@
 #Server Properties
-debug: true
+#debug: true
 server:
   port: 9898
   servlet:
@@ -25,3 +25,10 @@ spring:
     show-sql: true
     hibernate:
       ddl-auto: create-drop
+
+#see logback-spring.xml in classpath: src/main/resources
+logging:  level:#    root: off
+#    root: OFF
+    com.tekleads: debug
+#    com.tekleads: OFF
+  file:    name: C:\\Users\\Dissolve\\git\\nitproj\\logs\\Contact-App.log     
